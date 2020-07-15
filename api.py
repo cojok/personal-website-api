@@ -1,0 +1,32 @@
+from flask import Flask, make_response
+from flask_cors import CORS, cross_origin
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+
+from routes.main import main
+
+cors = CORS()
+
+def create_app(config_file='config/settings.py'):
+  # app init
+  app = Flask(__name__)
+  
+  #limiter
+  # limiter = Limiter(
+  #   app,
+  #   key_func=get_remote_address,
+  #   default_limits=["200 per day", "50 per hour"]
+  # )
+  
+  # limiter.limit('5/second')(main)
+  
+  #CORS settings
+  cors.init_app(app, resources={r"/v1/": {"origins": "*"}})
+  
+  # app get config from settings file 
+  app.config.from_pyfile(config_file)
+  
+  # app register route blueprint
+  app.register_blueprint(main, url_prefix='/v1/')
+  
+  return app
