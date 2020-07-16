@@ -11,15 +11,6 @@ def create_app(config_file='config/settings.py'):
   # app init
   app = Flask(__name__)
   
-  #limiter
-  # limiter = Limiter(
-  #   app,
-  #   key_func=get_remote_address,
-  #   default_limits=["200 per day", "50 per hour"]
-  # )
-  
-  # limiter.limit('5/second')(main)
-  
   #CORS settings
   cors.init_app(app, resources={r"/v1/": {"origins": "*"}})
   
