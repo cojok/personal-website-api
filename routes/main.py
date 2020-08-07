@@ -35,6 +35,10 @@ test_schema = {
 
 main = Blueprint('main', __name__)
 
+@main.route('/', methods=['GET'])
+def main_route():
+  return 'Welcome to my api'
+
 @main.route('/contact', methods=['POST'])
 @request_limit(10, timedelta(minutes=1))
 def contact():
