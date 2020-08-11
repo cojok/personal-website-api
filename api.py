@@ -1,7 +1,5 @@
 from flask import Flask, make_response
 from flask_cors import CORS, cross_origin
-from flask_limiter import Limiter
-from flask_limiter.util import get_remote_address
 
 from routes.main import main
 
