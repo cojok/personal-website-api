@@ -16,7 +16,6 @@ pyrsistent==0.16.0
 python-dotenv==0.14.0
 python-http-client==3.2.7
 redis==3.5.3
-sendgrid==6.4.2
 six==1.15.0
 starkbank-ecdsa==1.0.0
 uWSGI==2.0.19.1
