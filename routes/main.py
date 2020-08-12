@@ -1,4 +1,6 @@
 import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 from config.utils import request_limit
 from config.utils import allowed_contact_today
@@ -41,7 +43,7 @@ def main_route():
 @main.route('/contact', methods=['POST'])
 @request_limit(10, timedelta(minutes=1))
 def contact():
-  port = 465
+  port = 25
   r_data = request.data
   if len(r_data) == 0:
     return 'Not a valid body', 400
@@ -50,21 +52,21 @@ def contact():
   try:
     validate(instance=r_data, schema=test_schema)
     name: str = escape(r_data['name'])
-    email: str = escape(r_data['email'])
-    if not allowed_contact_today(email, name):
-      return abort(429)
+    sender: str = escape(r_data['email'])
+    # if not allowed_contact_today(email, name):
+      # return abort(429)
     message_body: str = escape(r_data['message'])
-    message = f"""\
-      Subject: Hi Mailtrap
-      To: {receiver}
-      From: {sender}
-      
-      {body}"""
+    receiver = 'flavius'
+    message = MIMEMultipart()
+    message['From'] = sender
+    message['To'] = 'contact@api.flaviuscojocariu.com'
+    message['Subject'] = 'Personal-Website-Contact'
+    body = MIMEText(message_body, 'html')
+    message.attach(body)
 
     with smtplib.SMTP('localhost', port) as server:
-      server.sendmail('test@api.flaviuscojocariu.com', 'cojokka@gmail.com', message(receiver=email, sender=email,
-                                                                                  body=message_body))
+      server.sendmail('test@api.flaviuscojocariu.com', 'cojokka@gmail.com', message.as_string())
+    return 'email sent', 200  
   except ValidationError as e:
     return { 'message': e.schema['message'], 'data': list(e.path) }, 400
-  # print(response.status_code, response.body, response.headers)
-  return 'sent email', 200
+
