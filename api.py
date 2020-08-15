@@ -10,7 +10,7 @@ def create_app(config_file='config/settings.py'):
   app = Flask(__name__)
   
   #CORS settings
-  cors.init_app(app, resources={r"/v1/": {"origins": "*"}})
+  cors.init_app(app, resources={r"/v1/": {"origins": "https://flaviuscojocariu.com/contact"}})
   
   # app get config from settings file 
   app.config.from_pyfile(config_file)
