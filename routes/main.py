@@ -56,7 +56,6 @@ def contact():
     # if not allowed_contact_today(email, name):
       # return abort(429)
     message_body: str = escape(r_data['message'])
-    receiver = 'flavius'
     message = MIMEMultipart()
     message['From'] = sender
     message['To'] = 'contact@api.flaviuscojocariu.com'
