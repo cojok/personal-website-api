@@ -2,10 +2,10 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-from config.utils import request_limit
-from config.utils import allowed_contact_today
+from config.utils import request_limit, allowed_contact_today, build_cors_prelight_response
 
 from flask import Blueprint, request, escape, abort
+from flask_cors import cross_origin
 from datetime import timedelta
 from jsonschema import validate
 from jsonschema.exceptions import ValidationError
@@ -40,9 +40,12 @@ main = Blueprint('main', __name__)
 def main_route():
   return 'Welcome to my api'
 
-@main.route('/contact', methods=['POST'])
+@main.route('/contact', methods=['POST', 'OPTIONS'])
+@cross_origin(allow_headers=['Content-Type'])
 @request_limit(10, timedelta(minutes=1))
 def contact():
+  if request.method == "OPTIONS": # CORS preflight
+    return build_cors_prelight_response()
   port = 25
   r_data = request.data
   if len(r_data) == 0:

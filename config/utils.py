@@ -1,7 +1,7 @@
 from datetime import timedelta
 from config.extensions import get_redis_client
 from redis.exceptions import LockError
-from flask import Response
+from flask import Response, make_response
 
 def request_limit(limit: int, period: timedelta):
     def _request_limit(function):
@@ -38,3 +38,14 @@ def allowed_contact_today(email, name) -> bool:
             value = name
         )
         return True
+
+def build_cors_prelight_response():
+    response = make_response()
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    response.headers.add('Access-Control-Allow-Headers', "*")
+    response.headers.add('Access-Control-Allow-Methods', "*")
+    return response
+
+def corsify_actual_response(response):
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    return response
