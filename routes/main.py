@@ -41,15 +41,15 @@ def main_route():
   return 'Welcome to my api'
 
 @main.route('/contact', methods=['POST', 'OPTIONS'])
-@cross_origin(allow_headers=['Content-Type'])
-@request_limit(10, timedelta(minutes=1))
+@cross_origin()
+# @request_limit(10, timedelta(minutes=1))
 def contact():
   if request.method == "OPTIONS": # CORS preflight
     return build_cors_prelight_response()
   port = 25
   r_data = request.data
   if len(r_data) == 0:
-    return 'Not a valid body', 400
+    return r_data, 400
   r_data = request.json
 
   try:
