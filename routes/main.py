@@ -42,7 +42,7 @@ def main_route():
 
 @main.route('/contact', methods=['POST', 'OPTIONS'])
 @cross_origin(origin="https://flaviuscojocariu.com")
-# @request_limit(10, timedelta(minutes=1))
+@request_limit(10, timedelta(minutes=1))
 def contact():
   if request.method == "OPTIONS": # CORS preflight
     return build_cors_prelight_response()
@@ -56,8 +56,8 @@ def contact():
     validate(instance=r_data, schema=test_schema)
     name: str = escape(r_data['name'])
     sender: str = escape(r_data['email'])
-    # if not allowed_contact_today(email, name):
-      # return abort(429)
+    # if not allowed_contact_today(sender, name):
+    #   return abort(429)
     message_body: str = escape(r_data['message'])
     message = MIMEMultipart()
     message['From'] = sender
